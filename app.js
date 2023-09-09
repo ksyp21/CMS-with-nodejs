@@ -64,7 +64,16 @@ app.get("/single/:id", async (req, res) => {
 })
 
 // database/table bata data kasari nikalney 
-
+app.get("/delete/:id", async (req, res) => {
+    const id = req.params.id
+    const data = await blogs.destroy({
+        where: {
+            id: id
+        }
+    })
+    res.redirect("/")
+    // res.send("from delete page")
+})
 
 app.listen(3000, () => {
     console.log("NodeJs project has started at port 3000")
