@@ -20,7 +20,6 @@ app.get("/", async (req, res) => {
     //blogs vanney table bata vayejati sabai data dey vaneko 
     const allBlogs = await blogs.findAll()
 
-
     // blogs vanney key/name ma allBlogs/data pass gareko ejs file lai
     res.render('blogs', { blogs: allBlogs })
 })
@@ -48,6 +47,20 @@ app.post("/createBlog", async (req, res) => {
         description: description
     })
     res.redirect("/")
+})
+
+// single blog page
+app.get("/single/:id", async (req, res) => {
+
+    const id = req.params.id
+
+    const blog = await blogs.findAll({
+        where: {
+            id: id
+        }
+    })
+    console.log(blog)
+    res.render("singleBlog", { blog: blog })
 })
 
 // database/table bata data kasari nikalney 
