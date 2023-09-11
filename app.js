@@ -1,5 +1,6 @@
 const express = require('express')
-const { blogs } = require('./model/index')
+const { blogs, sequelize } = require('./model/index')
+const { QueryTypes } = require('sequelize')
 const app = express()
 
 
@@ -49,30 +50,78 @@ app.post("/createBlog", async (req, res) => {
     res.redirect("/")
 })
 
-// single blog page
+// single blog page 
 app.get("/single/:id", async (req, res) => {
-
     const id = req.params.id
-
+    // second approach
+    // const {id} = req.params 
+    // id ko data magnu/find garnu paryo hamro table bata
     const blog = await blogs.findAll({
         where: {
             id: id
         }
     })
-    console.log(blog)
+    // second finding approach
+    // const blog = await blogs.findByPk(id)
+
     res.render("singleBlog", { blog: blog })
 })
 
-// database/table bata data kasari nikalney 
+// delete page 
 app.get("/delete/:id", async (req, res) => {
     const id = req.params.id
-    const data = await blogs.destroy({
+    // blogs vanney table bata tyo id ko delete gar vaneko yaha
+    await blogs.destroy({
         where: {
             id: id
         }
     })
+    //    await  sequelize.query('DELETE FROM blogs WHERE id=?',{
+    //         replacements  : [id],
+    //         type : QueryTypes.DELETE
+    //     })
     res.redirect("/")
-    // res.send("from delete page")
+})
+
+
+// EDIT BLOG
+app.get("/edit/:id", async (req, res) => {
+    const id = req.params.id
+    // find blog of that id 
+    const blog = await blogs.findAll({
+        where: {
+            id: id
+        }
+    })
+
+    res.render("editBlog", { blog: blog })
+})
+
+app.post("/editBlog/:id", async (req, res) => {
+    const id = req.params.id
+    const title = req.body.title
+    const subTitle = req.body.subtitle
+    const description = req.body.description
+
+    // first approach 
+    // await  blogs.update(req.body,{
+    //     where :{
+    //         id : id
+    //     }
+    // })
+
+    // second approach 
+    await blogs.update({
+        title: title,
+        subTitle: subTitle,
+        description: description
+    }, {
+        where: {
+            id: id
+        }
+    })
+
+    res.redirect("/single/" + id)
 })
 
 app.listen(3000, () => {
