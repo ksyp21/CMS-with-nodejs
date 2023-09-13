@@ -11,10 +11,28 @@ require("./model/index")
 // telling the nodejs to set view-engine to ejs
 app.set('view engine', 'ejs')
 
+// nodejs lai  file access garna dey vaneko hae yo code lay 
+app.use(express.static("public/"))
+app.use(express.static("hello/"))
+
 
 // form bata data aairaxa parse gara or handle gar vaneko ho
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
+app.get("/portfolio", (req, res) => {
+    const myData = [
+        {
+            name: "Kashyap Raj Karki",
+            whoami: "student"
+        }
+    ]
+    res.render("index.ejs", { myData: myData })
+})
+
+app.get("/components", (req, res) => {
+    res.render("components")
+})
 
 // allBlog
 app.get("/", async (req, res) => {
@@ -23,6 +41,10 @@ app.get("/", async (req, res) => {
 
     // blogs vanney key/name ma allBlogs/data pass gareko ejs file lai
     res.render('blogs', { blogs: allBlogs })
+    // res.json({
+    //     status : 200,
+    //     blogs : allBlogs
+    // })
 })
 
 //createBlog
@@ -48,6 +70,10 @@ app.post("/createBlog", async (req, res) => {
         description: description
     })
     res.redirect("/")
+    // res.json({
+    //     status : 200,
+    //     message : "Blog created sucesfully"
+    // })
 })
 
 // single blog page 
@@ -103,7 +129,7 @@ app.post("/editBlog/:id", async (req, res) => {
     const subTitle = req.body.subtitle
     const description = req.body.description
 
-    // first approach 
+    // first approach (X)
     // await  blogs.update(req.body,{
     //     where :{
     //         id : id
