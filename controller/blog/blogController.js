@@ -4,6 +4,9 @@ exports.renderCreateBlog = (req, res) => {
     res.render("createBlog")
 }
 
+exports.renderUser = (req, res) => {
+    res.render('register')
+}
 exports.createBlog = async (req, res) => {
 
     // second approach

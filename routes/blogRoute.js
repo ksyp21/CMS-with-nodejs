@@ -1,4 +1,4 @@
-const { renderCreateBlog, createBlog, allBlog, singleBlog, deleteBlog, editBlog, renderEditBlog } = require("../controller/blog/blogController");
+const { renderCreateBlog, createBlog, allBlog, singleBlog, deleteBlog, editBlog, renderEditBlog, renderRegister } = require("../controller/blog/blogController");
 
 const router = require("express").Router()
 
@@ -12,7 +12,6 @@ router.route("/single/:id").get(singleBlog)
 router.route("/delete/:id").get(deleteBlog)
 router.route("/editBlog/:id").post(editBlog)
 router.route("/edit/:id").get(renderEditBlog)
-
 
 // router.route("/:id").get(singleBlog).post(editBlog)
 
