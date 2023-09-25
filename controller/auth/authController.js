@@ -33,3 +33,8 @@ exports.registerUser = async (req, res) => {
 exports.renderLoginForm = (req, res) => {
     res.render("login")
 }
+
+exports.loginUsers = (req, res) => {
+    console.log(req.body)
+}
+
