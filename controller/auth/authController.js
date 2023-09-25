@@ -34,7 +34,37 @@ exports.renderLoginForm = (req, res) => {
     res.render("login")
 }
 
-exports.loginUsers = (req, res) => {
-    console.log(req.body)
+exports.loginUsers = async (req, res) => {
+
+    const email = req.body.email
+    const password = req.body.password
+    // console.log(req.body)
+
+    if (!email || !password) {
+        return res.send("Email and password required")
+    }
+    //check if that email exists or not
+    const associatedDataWithEmail = await users.findAll({
+        where: {
+
+            email: email,
+
+        }
+
+    })
+    if (associatedDataWithEmail.length == 0) {
+        res.send("Email does not exist")
+    }
+    else {
+        const associatedEmailPassword = associatedDataWithEmail[0].password
+        const isMatched = bcrypt.compareSync(password, associatedEmailPassword)
+        if (isMatched) {
+            res.send("Login Successful")
+        }
+        else {
+            res.send("Invalid Password")
+        }
+    }
+
 }
 
